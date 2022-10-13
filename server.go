@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net"
 	"net/rpc"
+	"net/rpc/jsonrpc"
 )
 
 type World struct {
@@ -36,6 +37,8 @@ func main() {
 		if err != nil {
 			return
 		}
-		rpc.ServeConn(conn)
+		// go rpc.ServeConn(conn) // 只能go语言rpc，无法跨语言
+		go rpc.ServeCodec(jsonrpc.NewServerCodec(conn)) // 支持跨语言
+
 	}
 }
